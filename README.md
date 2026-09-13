@@ -204,4 +204,6 @@ Compiled with `gcc -Wall -Wextra` — **zero warnings**.
 
 ## License
 
-MIT — built as a portfolio and educational project.
+This project is licensed under the [MIT License](LICENSE).
+
+© 2026 Dhyey Joshi — built as a portfolio and educational project.
