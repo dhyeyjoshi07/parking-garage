@@ -1,3 +1,4 @@
+
 /*
  * style.css — Glassmorphism Design System for Parking Garage UI
  *
@@ -725,6 +726,8 @@ body::after {
 /* ==================== Exit Lane ==================== */
 .exit-lane-panel {
     padding: 22px;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .exit-lane-stack {
@@ -783,7 +786,20 @@ body::after {
 
 .exit-lane-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.exit-lane-actions .input {
+    flex: 1 1 150px;
+    min-width: 0;
+}
+
+.exit-lane-actions .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* ==================== Waitlist ==================== */
