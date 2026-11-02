@@ -14,8 +14,8 @@
 
 /* ==================== CSS Variables (Design Tokens) ==================== */
 
-/* Aurora theme (default) — deep indigo/navy with cyan/violet accents */
-:root, [data-theme="aurora"] {
+/* Aurora theme — deep indigo/navy with cyan/violet accents */
+:root {
     --bg-start: #050816;
     --bg-mid: #0F1B4D;
     --bg-end: #1B2E7A;
@@ -54,96 +54,6 @@
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Ember theme — warm dark reds/oranges */
-[data-theme="ember"] {
-    --bg-start: #0E0709;
-    --bg-mid: #2A0F14;
-    --bg-end: #5A2616;
-    --orb1: rgba(249,115,22,.24);
-    --orb2: rgba(225,29,72,.2);
-    --glass-bg: rgba(255,235,220,.07);
-    --glass-bg-hover: rgba(255,235,220,.12);
-    --glass-border: rgba(255,205,170,.2);
-    --glass-border-hover: rgba(255,205,170,.3);
-    --glass-shadow: 0 8px 32px rgba(0,0,0,.4);
-    --cyan: #FB923C;
-    --cyan-glow: rgba(251,146,60,.3);
-    --cyan-soft: rgba(251,146,60,.1);
-    --coral: #F87171;
-    --coral-glow: rgba(248,113,113,.3);
-    --coral-soft: rgba(248,113,113,.1);
-    --gold: #FACC15;
-    --gold-glow: rgba(250,204,21,.3);
-    --gold-soft: rgba(250,204,21,.1);
-    --green: #6EE7B7;
-    --green-glow: rgba(110,231,183,.3);
-    --purple: #FDA4AF;
-    --purple-glow: rgba(253,164,175,.3);
-    --text-primary: #FFF3EA;
-    --text-secondary: #C9AE9E;
-    --text-tertiary: rgba(201,174,158,.5);
-}
-
-/* Frost theme — light/glass, blue-purple accents */
-[data-theme="frost"] {
-    --bg-start: #E3F0FF;
-    --bg-mid: #CFD9FF;
-    --bg-end: #EBD8FF;
-    --orb1: rgba(79,70,229,.16);
-    --orb2: rgba(14,165,233,.22);
-    --glass-bg: rgba(255,255,255,.55);
-    --glass-bg-hover: rgba(255,255,255,.65);
-    --glass-border: rgba(255,255,255,.85);
-    --glass-border-hover: rgba(255,255,255,.95);
-    --glass-shadow: 0 8px 32px rgba(31,41,100,.12);
-    --cyan: #4F46E5;
-    --cyan-glow: rgba(79,70,229,.3);
-    --cyan-soft: rgba(79,70,229,.1);
-    --coral: #E11D48;
-    --coral-glow: rgba(225,29,72,.3);
-    --coral-soft: rgba(225,29,72,.1);
-    --gold: #D97706;
-    --gold-glow: rgba(217,119,6,.3);
-    --gold-soft: rgba(217,119,6,.1);
-    --green: #059669;
-    --green-glow: rgba(5,150,105,.3);
-    --purple: #0EA5E9;
-    --purple-glow: rgba(14,165,233,.3);
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-tertiary: rgba(71,85,105,.5);
-}
-
-/* Sorbet theme — warm pastel, peach/pink/purple */
-[data-theme="sorbet"] {
-    --bg-start: #FFE4D2;
-    --bg-mid: #FBCFE0;
-    --bg-end: #DCCBFA;
-    --orb1: rgba(249,115,22,.22);
-    --orb2: rgba(124,58,237,.18);
-    --glass-bg: rgba(255,255,255,.5);
-    --glass-bg-hover: rgba(255,255,255,.6);
-    --glass-border: rgba(255,255,255,.8);
-    --glass-border-hover: rgba(255,255,255,.9);
-    --glass-shadow: 0 8px 32px rgba(120,60,110,.14);
-    --cyan: #7C3AED;
-    --cyan-glow: rgba(124,58,237,.3);
-    --cyan-soft: rgba(124,58,237,.1);
-    --coral: #E11D48;
-    --coral-glow: rgba(225,29,72,.3);
-    --coral-soft: rgba(225,29,72,.1);
-    --gold: #CA8A04;
-    --gold-glow: rgba(202,138,4,.3);
-    --gold-soft: rgba(202,138,4,.1);
-    --green: #0D9488;
-    --green-glow: rgba(13,148,136,.3);
-    --purple: #F97316;
-    --purple-glow: rgba(249,115,22,.3);
-    --text-primary: #2B1B33;
-    --text-secondary: #6B5675;
-    --text-tertiary: rgba(107,86,117,.5);
 }
 
 /* ==================== Reset & Base ==================== */
@@ -222,38 +132,6 @@ body::before {
     background: var(--cyan);
     z-index: 150;
     transition: width 0.3s ease;
-}
-
-/* ==================== Theme Switcher ==================== */
-.theme-switcher {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-}
-
-.theme-btn {
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid var(--glass-border);
-    background: transparent;
-    color: var(--text-secondary);
-    transition: all 0.2s ease;
-    text-transform: capitalize;
-}
-
-.theme-btn:hover {
-    color: var(--text-primary);
-    border-color: var(--glass-border-hover);
-}
-
-.theme-btn[aria-pressed="true"] {
-    border-color: var(--cyan);
-    background: var(--cyan-soft);
-    color: var(--cyan);
 }
 
 /* ==================== Tag ==================== */

@@ -4,7 +4,7 @@
  * This is the orchestration layer for the frontend. It:
  *   1. Runs a terminal boot sequence on first load
  *   2. Seeds the garage with demo vehicles if empty
- *   3. Manages the theme switcher (Aurora, Ember, Frost, Sorbet)
+ *   3. Manages the Aurora glassmorphism theme
  *   4. Generates random plates when inputs are left blank
  *   5. Fetches data from the API and passes it to Components for rendering
  *   6. Manages the active floor tab state
@@ -160,43 +160,6 @@ const App = {
         });
     },
 
-    /* ==================== Theme Switcher ==================== */
-
-    /**
-     * initThemeSwitcher — Wire up the theme buttons and restore saved theme.
-     */
-    initThemeSwitcher() {
-        const switcher = document.getElementById('theme-switcher');
-        if (!switcher) return;
-
-        /* Restore saved theme */
-        const saved = localStorage.getItem('parking-theme') || 'aurora';
-        this.setTheme(saved);
-
-        /* Click handler on the theme switcher group */
-        switcher.addEventListener('click', (e) => {
-            const btn = e.target.closest('.theme-btn');
-            if (!btn) return;
-            const theme = btn.dataset.theme;
-            this.setTheme(theme);
-            localStorage.setItem('parking-theme', theme);
-        });
-    },
-
-    /**
-     * setTheme — Apply a theme by name.
-     * @param {string} theme - One of: aurora, ember, frost, sorbet
-     */
-    setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-
-        /* Update aria-pressed on theme buttons */
-        const buttons = document.querySelectorAll('.theme-btn');
-        buttons.forEach(btn => {
-            btn.setAttribute('aria-pressed', btn.dataset.theme === theme ? 'true' : 'false');
-        });
-    },
-
     /* ==================== Progress Bar ==================== */
 
     /**
@@ -243,9 +206,6 @@ const App = {
      * init — Bootstrap the application on page load.
      */
     async init() {
-        /* Initialize theme switcher first (before boot so overlay uses correct theme) */
-        this.initThemeSwitcher();
-
         /* Run boot sequence */
         await this.runBootSequence();
 

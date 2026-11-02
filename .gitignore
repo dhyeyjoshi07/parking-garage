@@ -25,3 +25,4 @@ venv/
 # Debug symbols
 *.dSYM/
 report.tex
+report.pdf

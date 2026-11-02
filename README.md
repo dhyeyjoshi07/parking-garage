@@ -2,7 +2,7 @@
 
 A full-stack parking garage simulator with a **C backend** (all data structures hand-rolled — no STL), a **glassmorphism web frontend** (HTML/CSS/JS), and a **Python Flask bridge** connecting them.
 
-> **60 slots · 3 floors · 5 data structures · 4 color themes · accelerated time · AED billing**
+> **60 slots · 3 floors · 5 data structures · Aurora theme · accelerated time · AED billing**
 
 ---
 
@@ -33,7 +33,7 @@ flowchart TB
 
 ## Features
 
-- **4 Color Themes** — Aurora (dark blue), Ember (warm red), Frost (light glass), Sorbet (pastel pink). Saved to localStorage.
+- **Aurora Theme** — deep navy/indigo glassmorphism with cyan and violet accents.
 - **Terminal Boot Sequence** — animated "system init" overlay on first load.
 - **Seed Data** — garage starts pre-populated with 12 vehicles (4 VIP) and 2 in the exit lane.
 - **Random Plate Generation** — click any action with an empty input and a random plate is auto-generated.
@@ -185,19 +185,6 @@ All commands output JSON to stdout.
 | **Standard rate** | 10 AED/hour (prorated) |
 | **VIP discount** | 20% off total |
 | **Daily cap** | 200 AED max |
-
----
-
-## Themes
-
-Switch themes from the header buttons. Choice is saved to `localStorage`.
-
-| Theme | Style |
-|-------|-------|
-| **Aurora** | Deep navy/indigo, cyan + violet accents |
-| **Ember** | Warm dark reds, orange + pink accents |
-| **Frost** | Light glass, indigo + sky blue accents |
-| **Sorbet** | Warm pastel peach/pink, purple + orange accents |
 
 ---
 
