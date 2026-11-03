@@ -19,9 +19,14 @@ import json
 # Flask app — serves frontend from the 'frontend/' directory
 app = Flask(__name__, static_folder='frontend')
 
-# Path to the compiled C executable
+# Path to the compiled C executable (auto-detects .exe on Windows)
 BACKEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backend')
-PARKING_BIN = os.path.join(BACKEND_DIR, 'parking')
+if os.path.exists(os.path.join(BACKEND_DIR, 'parking.exe')):
+    PARKING_BIN = os.path.join(BACKEND_DIR, 'parking.exe')
+elif os.path.exists(os.path.join(BACKEND_DIR, 'parking')):
+    PARKING_BIN = os.path.join(BACKEND_DIR, 'parking')
+else:
+    PARKING_BIN = os.path.join(BACKEND_DIR, 'parking.exe' if os.name == 'nt' else 'parking')
 
 # The C program stores its state file (garage.dat) relative to CWD.
 # We set the working directory to the project root so the state file

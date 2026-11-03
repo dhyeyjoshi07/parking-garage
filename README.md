@@ -107,23 +107,25 @@ parking-garage/
 
 ### 1. Build the Backend
 
+**macOS / Linux / WSL:**
 ```bash
 cd backend
 make
-```
-
-### 2. Run Unit Tests
-
-```bash
 make test
 ```
 
-### 3. Install Flask & Start Server
+**Windows (CMD / PowerShell):**
+```cmd
+cd backend
+build.bat
+```
+
+### 2. Install Flask & Start Server
 
 ```bash
 cd ..
-pip3 install -r requirements.txt
-python3 server.py
+pip install -r requirements.txt
+python server.py
 ```
 
 ### 4. Open the Dashboard
