@@ -62,7 +62,7 @@ int garage_init(Garage *g)
     ll_init(&g->log);
     stack_init(&g->exit_lane);
 
-    g->total_revenue_cents = 0;
+    g->total_revenue_fils = 0;
     g->initialized = GARAGE_MAGIC;
 
     return 0;
@@ -220,8 +220,8 @@ void garage_exit(Garage *g, const char *plate, ExitResult *result)
     result->is_vip = is_vip;
     format_duration(result->duration_seconds, result->duration_str);
 
-    /* Track revenue (in cents to avoid floating point accumulation errors) */
-    g->total_revenue_cents += (int)(charge * 100);
+    /* Track revenue (in fils to avoid floating point accumulation errors) */
+    g->total_revenue_fils += (int)(charge * 100);
 
     snprintf(result->message, sizeof(result->message),
              "Vehicle %s exited — charged %.2f AED (%s)",
@@ -307,7 +307,7 @@ void garage_destroy(Garage *g)
  * BINARY FILE FORMAT:
  *
  *   [4 bytes]  Magic number (GARAGE_MAGIC)
- *   [4 bytes]  Total revenue in cents
+ *   [4 bytes]  Total revenue in fils
  *
  *   For each floor (NUM_FLOORS times):
  *     [4 bytes]  Circular queue count
@@ -356,7 +356,7 @@ int garage_save(const Garage *g, const char *filepath)
 
     /* Write magic number and revenue */
     fwrite(&g->initialized, sizeof(int), 1, f);
-    fwrite(&g->total_revenue_cents, sizeof(int), 1, f);
+    fwrite(&g->total_revenue_fils, sizeof(int), 1, f);
 
     /* Write each floor's circular queue state */
     for (i = 0; i < NUM_FLOORS; i++) {
@@ -446,7 +446,7 @@ int garage_load(Garage *g, const char *filepath)
     }
 
     /* Read revenue */
-    fread(&g->total_revenue_cents, sizeof(int), 1, f);
+    fread(&g->total_revenue_fils, sizeof(int), 1, f);
     g->initialized = GARAGE_MAGIC;
 
     /* Read each floor's circular queue state */

@@ -93,7 +93,7 @@ static void cmd_status(Garage *g)
         json_add_int(&jb, "waitlist_size", pq_size(&g->waitlist));
         json_add_int(&jb, "exit_lane_size", stack_size(&g->exit_lane));
         json_add_double(&jb, "total_revenue",
-                         (double)g->total_revenue_cents / 100.0);
+                         (double)g->total_revenue_fils / 100.0);
     }
 
     json_object_end(&jb);

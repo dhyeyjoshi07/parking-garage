@@ -84,7 +84,7 @@ typedef struct {
     HashTable     vehicles;           /* Plate → location lookup           */
     LinkedList    log;                /* Chronological event log           */
     Stack         exit_lane;          /* Single-lane exit stack            */
-    int           total_revenue_cents;/* Running total (in cents)          */
+    int           total_revenue_fils; /* Running total (in fils, 1 AED=100)*/
     int           initialized;       /* Magic number to verify state file */
 } Garage;
 

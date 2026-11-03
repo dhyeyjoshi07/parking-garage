@@ -78,7 +78,7 @@ const App = {
             return; /* Already has data, skip seeding */
         }
 
-        console.log('🌱 Seeding garage with demo vehicles...');
+        console.info('🌱 Seeding garage with demo vehicles...');
 
         for (const car of this.seedVehicles) {
             await API.park(car.plate, car.vip);
@@ -88,7 +88,7 @@ const App = {
         await API.exitLanePush('EF9012');
         await API.exitLanePush('GH3456');
 
-        console.log('🌱 Seed complete — 12 vehicles parked, 2 in exit lane');
+        console.info('🌱 Seed complete — 12 vehicles parked, 2 in exit lane');
     },
 
     /* ==================== Boot Sequence ==================== */
@@ -225,7 +225,7 @@ const App = {
         this.garageStartTime = Date.now() / 1000;
         this.startGarageClock();
 
-        console.log('🅿️ Parking Garage UI initialized');
+        console.info('🅿️ Parking Garage UI initialized');
     },
 
     /* ==================== Event Binding ==================== */

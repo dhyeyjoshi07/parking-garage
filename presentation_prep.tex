@@ -1,0 +1,443 @@
+% ============================================================================
+%  Parking Garage — Presentation Script & Q&A Bank
+%  Compile with: tectonic presentation_prep.tex
+% ============================================================================
+
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{listings}
+\usepackage{microtype}
+
+\sloppy
+\emergencystretch=1.5em
+
+% Page border
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \draw[black, line width=1pt]
+      ([shift={(0.5cm,0.5cm)}]current page.south west)
+      rectangle
+      ([shift={(-0.5cm,-0.5cm)}]current page.north east);
+  \end{tikzpicture}%
+}
+
+\hypersetup{
+  colorlinks=true, linkcolor=blue!60!black, urlcolor=blue!70!black,
+  pdftitle={Parking Garage -- Presentation Prep},
+}
+
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{codeblue}{HTML}{1565C0}
+\definecolor{codegreen}{HTML}{2E7D32}
+
+\lstset{
+  basicstyle=\footnotesize\ttfamily,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  breaklines=true,
+  columns=flexible,
+  showstringspaces=false,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Parking Garage --- Presentation Prep}
+\fancyhead[R]{\small Dhyey Joshi}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\onehalfspacing
+
+\begin{document}
+
+% ======================= TITLE ============================
+\begin{center}
+  {\LARGE\bfseries Multi-Level Parking Garage\\Management System}\\[0.5cm]
+  {\large Presentation Script \& Q\&A Bank}\\[0.3cm]
+  {\normalsize Dhyey Joshi \quad $\cdot$ \quad \today}
+\end{center}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+
+\tableofcontents
+\newpage
+
+% ═══════════════════════════════════════════════════════════
+\part{Group Presentation Script}
+% ═══════════════════════════════════════════════════════════
+
+\textbf{6 Speakers, 3 Teams:}
+\begin{itemize}[nosep]
+  \item \textbf{Backend Team:} Speaker B1 \& Speaker B2 --- C data structures, algorithms, state persistence
+  \item \textbf{Frontend Team:} Speaker F1 \& Speaker F2 --- HTML/CSS/JS dashboard, Aurora theme, boot sequence
+  \item \textbf{API Team:} Speaker A1 \& Speaker A2 --- Flask bridge, park/exit workflow, billing, endpoints
+\end{itemize}
+
+\textbf{Total time:} $\sim$13 minutes ($\sim$2 min per speaker).
+
+\vspace{0.5em}
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}llXr@{}}
+\toprule
+\textbf{Slide} & \textbf{Speaker} & \textbf{Topic} & \textbf{Time} \\
+\midrule
+1  & B1 & Title + team intro                    & 30s \\
+2  & B1 & The Problem (5 challenges)            & 1 min \\
+3  & B2 & Objectives and Scope                  & 45s \\
+4  & B1 & One Problem, One Data Structure        & 1 min \\
+5  & B2 & Code: Slots \& Waitlist               & 1.5 min \\
+6  & B2 & Code: Lookup \& Exit Lane             & 1 min \\
+7  & A1 & Park and Exit, Step by Step           & 1.5 min \\
+8  & A2 & Billing Rules \& Test Results          & 1.5 min \\
+9  & F1 & Frontend Dashboard                    & 1 min \\
+10 & F2 & Frontend Design                       & 1 min \\
+11 & A1 & Integration: Frontend to Backend      & 1 min \\
+12 & A2 & API Endpoints                         & 1 min \\
+13 & A2 & Conclusion \& Q\&A                    & 45s \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ---------------------------------------------------------------
+\section{Slide 1 --- Title (B1, $\sim$30s)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker B1]:}
+
+``Good morning/afternoon everyone. We're presenting our Multi-Level Parking Garage Management System --- a full-stack project that manages 60 parking slots across 3 floors using five hand-rolled data structures in C.
+
+Our group has three teams: I'm with [B2] covering the backend data structures; [F1] and [F2] will walk through the frontend dashboard; and [A1] and [A2] handle the API integration, billing, and testing. Let's dive in.''
+
+% ---------------------------------------------------------------
+\section{Slide 2 --- The Problem (B1, $\sim$1 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker B1]:}
+
+``So what problems does a parking garage need to solve? There are five key challenges on this slide.
+
+\textbf{First}, slot allocation --- when a car arrives, we need to efficiently assign it a slot without scanning every space on every floor.
+
+\textbf{Second}, VIP priority --- when the garage is full, VIP vehicles should jump ahead of regular ones on the waitlist.
+
+\textbf{Third}, the single-lane exit --- our garage has one exit lane, so only the car at the front can leave. That's a classic stack problem.
+
+\textbf{Fourth}, instant lookup --- if someone asks `where is my car?', we need O(1) lookup, not a linear scan.
+
+And \textbf{fifth}, fair billing --- we charge 10 AED per hour, prorated, with a 15-minute grace period, 20\% VIP discount, and a 200 AED daily cap.
+
+Each of these maps cleanly to a classic data structure. I'll hand over to [B2] to cover our objectives.''
+
+% ---------------------------------------------------------------
+\section{Slide 3 --- Objectives and Scope (B2, $\sim$45s)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker B2]:}
+
+``Our objectives were straightforward: build all five data structures from scratch in C --- no standard library containers --- tie them into a garage orchestration layer with persistent state, connect it to the web through Flask, build a polished dashboard, and validate everything with tests.
+
+The scope is one 3-floor garage with 20 slots per floor, totalling 60 slots. The waitlist holds up to 50 entries, and we have a 101-bucket hash table for lookups. The critical constraint: zero third-party data structure libraries in the C code --- everything is hand-rolled.
+
+Now back to [B1] for how each problem maps to a data structure.''
+
+% ---------------------------------------------------------------
+\section{Slide 4 --- One Problem, One Data Structure (B1, $\sim$1 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker B1]:}
+
+``This slide shows the five problem-to-data-structure mappings.
+
+The \textbf{circular queue} handles slot allocation --- one queue per floor, pre-filled with indices 0 through 19. Park dequeues a slot; exit enqueues it back. Modular arithmetic wraps around without shifting.
+
+The \textbf{min-heap} powers the waitlist --- each entry has a priority level plus a timestamp for FIFO tie-breaking.
+
+The \textbf{stack} models the exit lane --- push adds a car, only the top car can pop out. Classic LIFO.
+
+The \textbf{singly linked list} stores the activity log with head and tail pointers for O(1) append.
+
+And the \textbf{hash table} uses DJB2 hashing with 101 buckets and separate chaining for O(1) average-case lookups.
+
+[B2] will now walk through the actual code.''
+
+% ---------------------------------------------------------------
+\section{Slide 5 --- Code: Slots \& Waitlist (B2, $\sim$1.5 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker B2]:}
+
+``Let me walk through the key backend code on this slide.
+
+For the circular queue: \texttt{cq\_dequeue} reads the slot at \texttt{data[front]}, then advances front with \texttt{(front + 1) \% capacity}. That modulo is what makes it circular --- when front reaches the end of the array, it wraps back to zero. No memory shifting needed, and both enqueue and dequeue are O(1).
+
+For the min-heap: the comparison function \texttt{entry\_less\_than} first compares priority levels. If they're equal, it compares timestamps --- so VIP beats regular, and among VIPs, whoever arrived first gets admitted first. Insert does sift-up, extract-min does sift-down. Both are O(log n).
+
+One interesting detail: when a car exits and a slot frees up, the system automatically calls \texttt{pq\_extract\_min} to admit the highest-priority waitlisted vehicle into the freed slot. The park and waitlist operations are tightly coupled.''
+
+% ---------------------------------------------------------------
+\section{Slide 6 --- Code: Lookup \& Exit Lane (B2, $\sim$1 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker B2]:}
+
+``This slide covers the hash table and the exit lane stack.
+
+The hash function is DJB2: \texttt{hash = 5381}, then for each character, \texttt{hash = hash * 33 + c}. The magic numbers 5381 and 33 were empirically chosen by Dan Bernstein for good distribution on short ASCII strings --- perfect for licence plates.
+
+We use 101 buckets --- a prime number to reduce clustering. With at most 60 vehicles, the load factor is about 0.59, so most chains have zero or one entry. Lookups, inserts, and deletes are all O(1) on average.
+
+The stack is the simplest structure --- push allocates a node and links it at the head, pop unlinks the head. Both O(1), no capacity limit.
+
+Now over to [A1] for the park and exit workflows.''
+
+% ---------------------------------------------------------------
+\section{Slide 7 --- Park and Exit, Step by Step (A1, $\sim$1.5 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker A1]:}
+
+``This slide traces how parking and exiting work end-to-end.
+
+\textbf{Parking:} When the frontend sends \texttt{POST /api/park} with a plate and VIP flag, Flask calls \texttt{./parking park ABC1234 1}. The C code first checks the hash table for duplicates. Then it tries floors 0, 1, 2 in order --- dequeueing from each floor's circular queue. If it finds a slot, it inserts into the hash table, logs the event, and returns JSON with the assigned location. If all floors are full, the vehicle joins the min-heap waitlist.
+
+\textbf{Exiting:} The C code looks up the plate in the hash table, gets the entry time, calls \texttt{calculate\_charge()}, returns the slot to its floor's queue, and deletes from the hash table. Critically --- if anyone is on the waitlist, it extracts the top-priority vehicle and parks it immediately in the freed slot. So a single exit can trigger a chain: exit, billing, slot return, waitlist dequeue, and a new park --- all in one command.
+
+Now [A2] will cover billing and testing.''
+
+% ---------------------------------------------------------------
+\section{Slide 8 --- Billing Rules \& Test Results (A2, $\sim$1.5 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker A2]:}
+
+``The billing system uses accelerated time. \texttt{TIME\_SCALE = 360} means 10 real seconds equals 1 garage hour. This lets us demo billing without waiting actual hours.
+
+The rate is flat: 10 AED per hour, prorated by the minute. The first 15 garage-minutes are free --- that's the grace period. VIPs get 20\% off, and there's a hard cap of 200 AED per day.
+
+The algorithm is: take real elapsed seconds, multiply by 360 to get garage seconds, convert to minutes. If under 15 minutes, the charge is zero. Otherwise, charge at 10 AED/hour. Apply VIP discount, then the cap.
+
+As for testing: 33 unit tests across 6 modules all pass. The backend compiles with \texttt{gcc -Wall -Wextra} with zero warnings. All 11 API endpoints have been verified end-to-end. The slide shows specific test results --- every billing edge case is covered.
+
+Now [F1] will show the frontend.''
+
+% ---------------------------------------------------------------
+\section{Slide 9 --- Frontend Dashboard (F1, $\sim$1 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker F1]:}
+
+``The frontend is a single-page application built with vanilla HTML, CSS, and JavaScript --- no frameworks, no build tools.
+
+This slide shows the main dashboard. On the left: the floor map showing all 60 slots colour-coded by availability, the pricing panel with a live garage clock, and the activity log. On the right: quick actions for park, lookup, and exit; the exit lane stack; and the waitlist.
+
+On first load, we display a full-screen terminal-style boot overlay that types out system initialization messages line by line before revealing the dashboard. We also have \\textbf{seed data} --- when the garage is empty, \texttt{seedGarage()} automatically parks 12 vehicles and pushes 2 into the exit lane so the dashboard is never empty for a demo.
+
+[F2] will cover the design decisions.''
+
+% ---------------------------------------------------------------
+\section{Slide 10 --- Frontend Design (F2, $\sim$1 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker F2]:}
+
+``The design uses the \textbf{Aurora theme}: a deep navy/indigo glassmorphism aesthetic with cyan and violet accents. All colours are defined as CSS custom properties on the \texttt{:root} element. The panels use semi-transparent backgrounds with \texttt{backdrop-filter: blur()}, subtle borders, and soft shadows.
+
+The JavaScript is split into three modules: \texttt{api.js} handles all fetch calls to the backend, \texttt{components.js} renders the floor map, log entries, and modals, and \texttt{app.js} manages application logic, event handlers, and the boot sequence.
+
+\textbf{Random plate generation:} If any input field is left blank and you click an action, the system generates a random plate like \texttt{KX-48210}. No tedious manual typing during a live demo.
+
+Now [A1] will explain the integration layer.''
+
+% ---------------------------------------------------------------
+\section{Slide 11 --- Integration: Frontend to Backend (A1, $\sim$1 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker A1]:}
+
+``Let me explain the three-tier integration.
+
+The browser sends HTTP/JSON requests to the Flask server on port 5000. Flask is intentionally thin --- about 130 lines of Python. It does NOT contain any business logic. It takes the API action, builds a command string, calls the C executable via \texttt{subprocess.run()}, captures its JSON stdout, and returns it as the HTTP response.
+
+The C executable is stateless per call --- every invocation loads from \texttt{garage.dat}, processes one command, prints JSON, and saves state back. This separation is deliberate: the C code never touches HTTP, Flask never needs to understand heaps or queues.
+
+We use a single catch-all route --- \texttt{/api/<action>} --- so Flask stays under 130 lines instead of having 11 redundant route functions.
+
+[A2] will walk through the endpoints.''
+
+% ---------------------------------------------------------------
+\section{Slide 12 --- API Endpoints (A2, $\sim$1 min)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker A2]:}
+
+``This slide lists all 11 API endpoints. They map one-to-one to the C CLI commands: \texttt{park}, \texttt{exit}, \texttt{lookup}, \texttt{status}, \texttt{floors}, \texttt{log}, \texttt{waitlist}, \texttt{exitlane\_push}, \texttt{exitlane\_pop}, \texttt{exitlane\_peek}, and \texttt{revenue}.
+
+Every endpoint returns consistent JSON with a \texttt{status} field that's either \texttt{ok} or \texttt{error}. Error responses include a human-readable \texttt{message} field. The frontend's \texttt{api.js} module makes fetch calls to these endpoints and feeds the JSON responses into \texttt{components.js} for rendering.
+
+One design decision worth noting: all endpoints accept POST with a JSON body. We could have used RESTful GET for read-only actions like \texttt{status} and \texttt{log}, but POST-everywhere simplified the frontend code --- every call uses the same fetch pattern.
+
+Now let me wrap up.''
+
+% ---------------------------------------------------------------
+\section{Slide 13 --- Conclusion (A2, $\sim$45s)}
+% ---------------------------------------------------------------
+
+\textbf{[Speaker A2]:}
+
+``To summarize what our team built: five data structures from scratch in C, a stateless subprocess architecture with binary state persistence, flat-rate AED billing with accelerated time, and a polished glassmorphism dashboard.
+
+Key numbers: 5,776 lines of code, 33 unit tests passing, zero compiler warnings, 11 CLI commands, and 11 API endpoints.
+
+Some honest limitations: requests run sequentially due to the subprocess model, reading recent log entries is O(n) with a singly linked list, and the binary state file is architecture-dependent.
+
+Future improvements could include a doubly-linked list for the log, dynamic hash table resizing, WebSocket push updates, and multi-lane exits.
+
+Thank you! We're happy to take questions.''
+
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════
+\part{Q\&A Bank --- 25 Probable Questions}
+% ═══════════════════════════════════════════════════════════
+
+% ---------------------------------------------------------------
+\section{Data Structures (Questions 1--8)}
+% ---------------------------------------------------------------
+
+\subsection{Q1: Why did you choose a circular queue over a regular queue for slot allocation?}
+
+\textbf{A:} A regular (linear) queue wastes space as the front pointer advances --- dequeued positions are never reused unless you shift elements (which is O(n)). A circular queue wraps the front and rear pointers using modulo arithmetic, so dequeued positions are naturally reused. Since our slots-per-floor count is fixed at 20, the circular queue perfectly matches the fixed-size pool of slot indices.
+
+\subsection{Q2: What happens if two vehicles hash to the same bucket? How do you handle collisions?}
+
+\textbf{A:} We use \textbf{separate chaining}. Each bucket holds a singly linked list of entries. On collision, the new entry is prepended to the chain in O(1). During lookup, we walk the chain comparing plates. With 60 vehicles across 101 buckets, the average chain length is under 0.6, so most lookups check zero or one entry. In the worst case (all 60 vehicles in one bucket), lookup degrades to O(n), but DJB2 distributes plates well enough that this doesn't happen in practice.
+
+\subsection{Q3: Why 101 buckets specifically? What would happen with 100?}
+
+\textbf{A:} 101 is a \textbf{prime number}. When computing \texttt{hash \% capacity}, a prime modulus ensures that hash values don't cluster around multiples of common factors. With 100 buckets (non-prime, $2^2 \times 5^2$), strings whose hash values share factors of 2, 4, 5, 10, 20, 25, or 50 would collide more often. The difference is small for our dataset but it's a well-known best practice in hash table design.
+
+\subsection{Q4: How does the min-heap guarantee VIP vehicles are admitted before regular ones?}
+
+\textbf{A:} Each waitlist entry has a \texttt{priority} field: 0 for VIP, 1 for reserved, 2 for regular. The heap comparison treats entries as (priority, request\_time) tuples. A VIP entry with priority 0 is always ``less than'' a regular entry with priority 2, so it floats to the root. For tie-breaking within the same priority level, we compare timestamps --- earlier arrivals come first (FIFO). Extract-min always returns the entry with the smallest (priority, time) tuple.
+
+\subsection{Q5: Your linked list's \texttt{get\_recent} is O(n). How would you make it O(1)?}
+
+\textbf{A:} Three options: (1) Use a \textbf{doubly-linked list} with a tail pointer and traverse backward --- but that adds a prev pointer to every node. (2) Use a \textbf{circular buffer} (ring buffer) of fixed size that overwrites old entries --- O(1) access to the last k entries. (3) Maintain a separate pointer to the $(n-k)$-th node that we advance on each append. We chose the simple singly-linked list because the log is small in our demo, but option 2 would be the production choice.
+
+\subsection{Q6: What is the time complexity of parking a vehicle when the garage is full?}
+
+\textbf{A:} When the garage is full, we try all 3 floors' circular queues (3 $\times$ O(1) = O(1)), find them all empty, then insert into the min-heap waitlist. Heap insert is O(log W) where W $\leq$ 50. So the total is O(log W). In practice, with W $\leq$ 50, that's at most $\sim$6 comparisons.
+
+\subsection{Q7: What would break if you used a regular queue instead of a stack for the exit lane?}
+
+\textbf{A:} The physical constraint is that only the \textbf{last car to enter} the lane can leave first (it's a dead-end lane). A queue is FIFO --- the first car in leaves first --- which would require cars in the back to somehow pass through cars in front. The stack's LIFO property matches the real-world physics: only the car nearest the exit (top of stack) can drive out.
+
+\subsection{Q8: Could you replace the hash table with a balanced BST? What are the trade-offs?}
+
+\textbf{A:} Yes, a balanced BST (AVL or red-black tree) would give O(log n) lookup, insert, and delete --- guaranteed. The hash table gives O(1) average but O(n) worst case. However, for our use case (60 entries max), the hash table is faster in practice and simpler to implement. A BST would also give us sorted iteration for free (in-order traversal), which we don't need. The hash table's weakness --- poor worst-case --- is mitigated by using a good hash function (DJB2) and a prime bucket count.
+
+% ---------------------------------------------------------------
+\section{Architecture and Integration (Questions 9--14)}
+% ---------------------------------------------------------------
+
+\subsection{Q9: Why not embed the C code directly in Flask using ctypes or CFFI instead of subprocess?}
+
+\textbf{A:} Using subprocess keeps the C code completely self-contained --- it reads from stdin/arguments, writes JSON to stdout, and manages its own state file. This means: (1) we can test the C program independently from the command line, (2) a crash in the C code doesn't bring down Flask, (3) no complex memory management across the Python-C boundary. The trade-off is performance --- each request spawns a new process ($\sim$5ms overhead). For a production system, ctypes or a C extension would be faster, but for a portfolio/demo project, subprocess is cleaner and safer.
+
+\subsection{Q10: Your C program is ``stateless per call'' but uses a state file. Isn't that a contradiction?}
+
+\textbf{A:} Not really. The \textbf{process} is stateless --- it starts fresh every time, loads state from disk, processes one command, and exits. But the \textbf{system} is stateful via \texttt{garage.dat}. This is analogous to how a REST API is stateless per request but uses a database for persistence. The advantage is simplicity: no long-running daemon, no in-memory state to corrupt, and the state file acts as a checkpoint.
+
+\subsection{Q11: What happens if Flask sends two requests simultaneously? Is there a race condition?}
+
+\textbf{A:} Yes, there is a potential race condition. Two concurrent \texttt{subprocess.run()} calls could both load \texttt{garage.dat}, make conflicting changes, and one would overwrite the other's write. Flask's development server is single-threaded by default, which accidentally serializes requests. In production, we'd need file locking (\texttt{flock()}) or a proper database. This is a known limitation we documented.
+
+\subsection{Q12: Why does Flask use a single catch-all route instead of separate routes per action?}
+
+\textbf{A:} The route \texttt{/api/<action>} acts as a dispatcher. Since Flask's only job is to forward the action name and arguments to the C executable, having 11 separate route functions with identical logic would be redundant. The catch-all keeps Flask under 130 lines. The C program's \texttt{main()} does the actual command dispatch via \texttt{strcmp()}.
+
+\subsection{Q13: How do you validate the state file? What if it gets corrupted?}
+
+\textbf{A:} The first 4 bytes of \texttt{garage.dat} are a magic number: \texttt{0x50415243} (ASCII ``PARC''). On load, we check this value. If it doesn't match, we assume the file is corrupted or from an incompatible version and initialize a fresh garage. This doesn't catch all corruption (e.g., a valid magic but garbled data), but it catches the most common cases --- wrong file, truncated file, or version mismatch.
+
+\subsection{Q14: How does the frontend know the current garage time if the clock runs at 360x speed?}
+
+\textbf{A:} The frontend maintains its own JavaScript timer that ticks every second and multiplies elapsed time by 360. The ``garage clock'' displayed in the pricing panel is purely cosmetic --- actual billing is computed server-side by the C code using \texttt{time()} timestamps and the same TIME\_SCALE constant. The two clocks don't need to be perfectly synchronized because billing only cares about the entry and exit timestamps.
+
+% ---------------------------------------------------------------
+\section{Billing and Edge Cases (Questions 15--19)}
+% ---------------------------------------------------------------
+
+\subsection{Q15: Why store revenue in fils (integer subunits) instead of floating point?}
+
+\textbf{A:} Floating-point arithmetic has rounding errors. For example, \texttt{0.1 + 0.2 = 0.30000000000000004} in IEEE 754. If you accumulate thousands of transactions, these errors compound. By storing revenue in fils (1 AED = 100 fils) as integers, all arithmetic is exact. We only convert to AED for display. This is standard practice in financial software.
+
+\subsection{Q16: A vehicle parks at time T and exits at T+2 real seconds. How much is the charge?}
+
+\textbf{A:} 2 real seconds $\times$ 360 = 720 garage seconds = 12 garage minutes. Since 12 minutes is under the 15-minute grace period, the charge is \textbf{0 AED} (free).
+
+\subsection{Q17: A VIP vehicle parks for exactly 3 real minutes. What's the charge?}
+
+\textbf{A:} 180 real seconds $\times$ 360 = 64{,}800 garage seconds = 1{,}080 garage minutes = 18 garage hours. Standard charge: $18 \times 10 = 180$ AED. VIP discount: $180 \times 0.80 = 144$ AED. Under the 200 AED cap, so the final charge is \textbf{144 AED}.
+
+\subsection{Q18: What happens if you try to park the same plate twice?}
+
+\textbf{A:} The \texttt{garage\_park()} function first calls \texttt{ht\_lookup()} on the hash table. If the plate already exists, it returns \texttt{GARAGE\_ERR\_DUPLICATE} and a JSON error message: ``Vehicle already parked.'' The slot allocation is never attempted.
+
+\subsection{Q19: What if someone calls exitlane\_pop when the lane is empty?}
+
+\textbf{A:} \texttt{stack\_pop()} checks \texttt{s->top == NULL} and returns \texttt{-1}. The \texttt{cmd\_exitlane\_pop()} function catches this and prints a JSON error: \texttt{\{``status'': ``error'', ``message'': ``Exit lane is empty''\}}. No crash, no undefined behavior.
+
+% ---------------------------------------------------------------
+\section{Tricky / Advanced Questions (Questions 20--25)}
+% ---------------------------------------------------------------
+
+\subsection{Q20: DJB2 uses the magic number 5381. What happens if you initialize hash to 0 instead?}
+
+\textbf{A:} If hash starts at 0, then \texttt{hash * 33 + c} for the first character is just \texttt{c} --- the hash becomes entirely dependent on the first character's ASCII value. Short strings with the same first character would cluster badly. The number 5381 is an odd prime that provides a ``random-looking'' starting point, ensuring that even single-character strings produce well-distributed hashes. Bernstein tested many initial values empirically and found 5381 gave the fewest collisions on typical string datasets.
+
+\subsection{Q21: Your sift-down in the min-heap compares with both children. What if you only compared with the left child?}
+
+\textbf{A:} You'd violate the heap property. The purpose of comparing with \emph{both} children is to swap with the \emph{smaller} one. If you only check the left child and swap when it's smaller, the right child could be even smaller and end up below a larger parent --- breaking the min-heap invariant. Future extract-min operations would return incorrect results.
+
+\subsection{Q22: What happens to the garage state if the C program crashes mid-write of garage.dat?}
+
+\textbf{A:} The file could be truncated or contain partial data. On the next load, the magic number check (\texttt{0x50415243}) would likely fail, and the system would reinitialize a fresh garage --- losing all state. A more robust solution would be to write to a temporary file first, then atomically rename it (\texttt{rename()} is atomic on most filesystems). This is the ``write-ahead'' or ``atomic replace'' pattern used by databases.
+
+\subsection{Q23: Why does the circular queue use \texttt{count} instead of just checking \texttt{front == rear} for empty/full?}
+
+\textbf{A:} With only front and rear pointers, you can't distinguish between ``empty'' and ``full'' --- both states have \texttt{front == rear}. Common workarounds are: (1) waste one slot (capacity $n$ but max $n{-}1$ elements), or (2) maintain a separate count. We chose a count because it also gives us \texttt{cq\_available\_count()} for free, which the frontend uses to display per-floor availability. The count approach uses the full capacity without wasting a slot.
+
+\subsection{Q24: If Flask calls subprocess with a 5-second timeout but the C program enters an infinite loop, what happens?}
+
+\textbf{A:} Python's \texttt{subprocess.run(timeout=5)} raises \texttt{subprocess.TimeoutExpired} after 5 seconds. Our Flask code catches this and returns a 504 Gateway Timeout response with the JSON message ``Backend timeout.'' The zombie C process is killed by Python. The state file may be in an inconsistent state if the loop happened after loading but before saving --- but since the C code saves at the end (\texttt{garage\_save} is the last call), an infinite loop in command processing would mean the old state file is still valid.
+
+\subsection{Q25: Your binary state file won't work across machines with different endianness. How would you fix this?}
+
+\textbf{A:} Three approaches: (1) Use \textbf{JSON or text} for the state file --- human-readable and portable, but slower to parse. (2) Use a standard binary format with explicit byte ordering --- convert all multi-byte values to network byte order (\texttt{htonl}/\texttt{ntohl}) before writing. (3) Use a library like Protocol Buffers or MessagePack for cross-platform serialization. For our demo scope, binary \texttt{fwrite} is fine since the same machine compiles and runs the code, but option 1 would be the pragmatic production fix.
+
+
+\end{document}
+
