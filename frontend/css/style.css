@@ -1056,7 +1056,7 @@ body::before {
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     padding: 28px;
-    max-width: 420px;
+    max-width: 440px;
     width: 90%;
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
 }
@@ -1071,14 +1071,14 @@ body::before {
 .modal__subtitle {
     font-size: 0.8rem;
     color: var(--text-secondary);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .modal__details {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 22px;
+    margin-bottom: 14px;
 }
 
 .modal__row {
@@ -1099,6 +1099,55 @@ body::before {
 .modal__row-value--amount {
     color: var(--green);
     font-size: 1.1rem;
+}
+
+/* Receipt billing calculation breakdown */
+.modal__calc-box {
+    background: rgba(5, 8, 22, 0.65);
+    border: 1px dashed var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 0.8rem;
+}
+
+.modal__calc-header {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--cyan);
+    font-weight: 700;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.modal__calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.modal__calc-row--highlight {
+    color: var(--gold);
+    font-weight: 600;
+}
+
+.modal__calc-row--discount {
+    color: var(--green);
+    font-weight: 600;
+}
+
+.modal__calc-formula {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-primary);
 }
 
 .modal__actions {

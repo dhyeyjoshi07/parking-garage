@@ -62,6 +62,12 @@ typedef struct {
     int is_vip;
     char duration_str[32]; /* e.g., "2h 15m" */
     char message[128];
+    /* Billing breakdown fields */
+    double garage_minutes;     /* Total garage-time minutes             */
+    double raw_charge;         /* Charge before discount and cap        */
+    double after_discount;     /* Charge after VIP discount (if any)    */
+    int    grace_applied;      /* 1 if within 15-min grace period       */
+    int    cap_applied;        /* 1 if 200 AED daily cap was applied    */
 } ExitResult;
 
 /* Holds the result of a lookup operation */

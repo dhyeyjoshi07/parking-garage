@@ -199,8 +199,18 @@ void garage_exit(Garage *g, const char *plate, ExitResult *result)
     strncpy(result->plate, plate, 15);
     result->plate[15] = '\0';
 
-    /* Step 2: Calculate billing */
-    charge = calculate_charge(entry_time, now, is_vip);
+    /* Step 2: Calculate billing (with breakdown for exit receipt) */
+    {
+        BillingBreakdown bd;
+        charge = calculate_charge_detailed(entry_time, now, is_vip, &bd);
+
+        /* Copy breakdown into result for JSON output */
+        result->garage_minutes  = bd.garage_minutes;
+        result->raw_charge      = bd.raw_charge;
+        result->after_discount  = bd.after_discount;
+        result->grace_applied   = bd.grace_applied;
+        result->cap_applied     = bd.cap_applied;
+    }
 
     /* Step 3: Return the slot to the floor's circular queue */
     cq_enqueue(&g->floors[floor], slot);

@@ -20,46 +20,11 @@
 /*
  * calculate_charge — Compute the parking fee in AED.
  *
- * Steps:
- *   1. Compute real elapsed seconds.
- *   2. Scale to garage time (multiply by TIME_SCALE).
- *   3. Convert to garage minutes.
- *   4. Apply grace period (first 15 minutes free).
- *   5. Charge 10 AED/hour for remaining time.
- *   6. Apply VIP discount and daily cap.
+ * Wrapper around calculate_charge_detailed without breakdown output.
  */
 double calculate_charge(long entry_time, long exit_time, int is_vip)
 {
-    long real_seconds;
-    double garage_seconds;
-    double garage_minutes;
-    double charge;
-
-    /* Guard against negative durations (clock issues) */
-    real_seconds = exit_time - entry_time;
-    if (real_seconds <= 0) return 0.0;
-
-    /* Scale to garage time */
-    garage_seconds = (double)real_seconds * TIME_SCALE;
-    garage_minutes = garage_seconds / 60.0;
-
-    /* Grace period: first 15 garage-minutes are free */
-    if (garage_minutes <= 15.0) return 0.0;
-
-    /* 10 AED per hour, prorated by the minute */
-    charge = (garage_minutes / 60.0) * 10.0;
-
-    /* Apply VIP discount: 20% off */
-    if (is_vip) {
-        charge *= 0.80;
-    }
-
-    /* Apply daily maximum cap */
-    if (charge > 200.0) {
-        charge = 200.0;
-    }
-
-    return charge;
+    return calculate_charge_detailed(entry_time, exit_time, is_vip, NULL);
 }
 
 /*
@@ -88,4 +53,68 @@ void format_duration(long seconds, char *buffer)
     } else {
         snprintf(buffer, 32, "%ldm", minutes);
     }
+}
+
+/*
+ * calculate_charge_detailed — Compute parking fee with full breakdown.
+ *
+ * Same logic as calculate_charge, but populates a BillingBreakdown
+ * struct with intermediate values for display in the exit receipt.
+ */
+double calculate_charge_detailed(long entry_time, long exit_time,
+                                 int is_vip, BillingBreakdown *bd)
+{
+    long real_seconds;
+    double garage_seconds;
+    double garage_minutes;
+    double charge;
+
+    /* Initialize breakdown */
+    if (bd) {
+        bd->garage_minutes = 0.0;
+        bd->raw_charge = 0.0;
+        bd->after_discount = 0.0;
+        bd->final_charge = 0.0;
+        bd->grace_applied = 0;
+        bd->cap_applied = 0;
+    }
+
+    /* Guard against negative durations */
+    real_seconds = exit_time - entry_time;
+    if (real_seconds <= 0) {
+        if (bd) bd->grace_applied = 1;
+        return 0.0;
+    }
+
+    /* Scale to garage time */
+    garage_seconds = (double)real_seconds * TIME_SCALE;
+    garage_minutes = garage_seconds / 60.0;
+
+    if (bd) bd->garage_minutes = garage_minutes;
+
+    /* Grace period: first 15 garage-minutes are free */
+    if (garage_minutes <= 15.0) {
+        if (bd) bd->grace_applied = 1;
+        return 0.0;
+    }
+
+    /* 10 AED per hour, prorated by the minute */
+    charge = (garage_minutes / 60.0) * 10.0;
+    if (bd) bd->raw_charge = charge;
+
+    /* Apply VIP discount: 20% off */
+    if (is_vip) {
+        charge *= 0.80;
+    }
+    if (bd) bd->after_discount = charge;
+
+    /* Apply daily maximum cap */
+    if (charge > 200.0) {
+        if (bd) bd->cap_applied = 1;
+        charge = 200.0;
+    }
+
+    if (bd) bd->final_charge = charge;
+
+    return charge;
 }

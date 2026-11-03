@@ -170,15 +170,78 @@ const Components = {
      * @returns {string} HTML for the modal overlay
      */
     renderBillingModal(data) {
-        const vipBadge = data.is_vip
+        const isVip = Boolean(data.is_vip);
+        const vipBadge = isVip
             ? '<span style="color: var(--gold); font-size: 0.8rem;"> ⭐ VIP (20% off)</span>'
             : '';
+
+        const realSeconds = data.duration_seconds || 0;
+        const garageMinutes = data.garage_minutes !== undefined
+            ? data.garage_minutes
+            : (realSeconds * 360) / 60;
+        const garageHours = garageMinutes / 60;
+
+        let calcRows = '';
+
+        if (data.grace_applied || garageMinutes <= 15) {
+            calcRows = `
+                <div class="modal__calc-row">
+                    <span>Garage Duration</span>
+                    <span class="modal__calc-formula">${garageMinutes.toFixed(1)}m (≤ 15m grace)</span>
+                </div>
+                <div class="modal__calc-row modal__calc-row--highlight">
+                    <span>Grace Period Rule</span>
+                    <span>First 15m FREE (0.00 AED)</span>
+                </div>`;
+        } else {
+            const rawCharge = data.raw_charge !== undefined
+                ? data.raw_charge
+                : garageHours * 10;
+            const afterDiscount = data.after_discount !== undefined
+                ? data.after_discount
+                : (isVip ? rawCharge * 0.8 : rawCharge);
+
+            calcRows = `
+                <div class="modal__calc-row">
+                    <span>Garage Duration</span>
+                    <span class="modal__calc-formula">${garageMinutes.toFixed(1)}m (${garageHours.toFixed(2)} hrs)</span>
+                </div>
+                <div class="modal__calc-row">
+                    <span>Base Hourly Rate</span>
+                    <span class="modal__calc-formula">10.00 AED / hr</span>
+                </div>
+                <div class="modal__calc-row">
+                    <span>Prorated Charge</span>
+                    <span class="modal__calc-formula">(${garageMinutes.toFixed(1)}m / 60) × 10 = ${rawCharge.toFixed(2)} AED</span>
+                </div>`;
+
+            if (isVip) {
+                const discountAmount = rawCharge - afterDiscount;
+                calcRows += `
+                <div class="modal__calc-row modal__calc-row--discount">
+                    <span>VIP 20% Discount</span>
+                    <span class="modal__calc-formula">−${discountAmount.toFixed(2)} AED</span>
+                </div>`;
+            }
+
+            if (data.cap_applied || (isVip ? afterDiscount : rawCharge) > 200) {
+                calcRows += `
+                <div class="modal__calc-row modal__calc-row--highlight">
+                    <span>Daily Maximum Cap</span>
+                    <span class="modal__calc-formula">Capped at 200.00 AED</span>
+                </div>`;
+            }
+        }
+
+        const amount = typeof data.amount === 'number' ? data.amount : 0;
+        const floorNum = (data.floor !== undefined && data.floor >= 0) ? data.floor + 1 : 1;
+        const slotNum = (data.slot !== undefined && data.slot >= 0) ? data.slot + 1 : 1;
 
         return `
             <div class="modal-overlay" id="billing-modal">
                 <div class="modal">
                     <div class="modal__title">🧾 Exit Receipt ${vipBadge}</div>
-                    <div class="modal__subtitle">${data.message}</div>
+                    <div class="modal__subtitle">${data.message || 'Vehicle exited'}</div>
                     <div class="modal__details">
                         <div class="modal__row">
                             <span class="modal__row-label">License Plate</span>
@@ -186,15 +249,23 @@ const Components = {
                         </div>
                         <div class="modal__row">
                             <span class="modal__row-label">Location</span>
-                            <span class="modal__row-value">Floor ${data.floor + 1}, Slot ${data.slot + 1}</span>
+                            <span class="modal__row-value">Floor ${floorNum}, Slot ${slotNum}</span>
                         </div>
                         <div class="modal__row">
                             <span class="modal__row-label">Duration</span>
                             <span class="modal__row-value">${data.duration_str || '0m'}</span>
                         </div>
-                        <div class="modal__row" style="padding-top: 8px; border-top: 1px solid var(--glass-border);">
-                            <span class="modal__row-label" style="font-size: 1rem;">Amount Due</span>
-                            <span class="modal__row-value modal__row-value--amount">${data.amount.toFixed(2)} AED</span>
+                    </div>
+
+                    <div class="modal__calc-box">
+                        <div class="modal__calc-header">⚡ Billing Calculation (360× scale)</div>
+                        ${calcRows}
+                    </div>
+
+                    <div class="modal__details" style="margin-bottom: 20px;">
+                        <div class="modal__row" style="padding-top: 10px; border-top: 1px solid var(--glass-border);">
+                            <span class="modal__row-label" style="font-size: 1rem; color: var(--text-primary); font-weight: 600;">Total Amount Due</span>
+                            <span class="modal__row-value modal__row-value--amount">${amount.toFixed(2)} AED</span>
                         </div>
                     </div>
                     <div class="modal__actions">

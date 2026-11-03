@@ -162,6 +162,13 @@ static void cmd_exit(Garage *g, const char *plate)
     json_add_int(&jb, "is_vip", result.is_vip);
     json_add_string(&jb, "message", result.message);
 
+    /* Billing breakdown for exit receipt */
+    json_add_double(&jb, "garage_minutes", result.garage_minutes);
+    json_add_double(&jb, "raw_charge", result.raw_charge);
+    json_add_double(&jb, "after_discount", result.after_discount);
+    json_add_int(&jb, "grace_applied", result.grace_applied);
+    json_add_int(&jb, "cap_applied", result.cap_applied);
+
     json_object_end(&jb);
     printf("%s\n", json_finish(&jb));
 }
@@ -320,10 +327,18 @@ static void cmd_exitlane_pop(Garage *g)
             ExitResult exit_result;
             garage_exit(g, plate, &exit_result);
             if (exit_result.result_code == GARAGE_OK) {
+                json_add_int(&jb, "floor", exit_result.floor);
+                json_add_int(&jb, "slot", exit_result.slot);
+                json_add_int(&jb, "is_vip", exit_result.is_vip);
                 json_add_double(&jb, "amount", exit_result.amount);
                 json_add_string(&jb, "duration_str", exit_result.duration_str);
                 json_add_long(&jb, "duration_seconds",
                               exit_result.duration_seconds);
+                json_add_double(&jb, "garage_minutes", exit_result.garage_minutes);
+                json_add_double(&jb, "raw_charge", exit_result.raw_charge);
+                json_add_double(&jb, "after_discount", exit_result.after_discount);
+                json_add_int(&jb, "grace_applied", exit_result.grace_applied);
+                json_add_int(&jb, "cap_applied", exit_result.cap_applied);
             }
         }
     } else {

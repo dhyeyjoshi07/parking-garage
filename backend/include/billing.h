@@ -42,4 +42,25 @@ double calculate_charge(long entry_time, long exit_time, int is_vip);
  */
 void format_duration(long seconds, char *buffer);
 
+/*
+ * BillingBreakdown — Detailed billing calculation results.
+ * Used to show the step-by-step calculation in the exit receipt.
+ */
+typedef struct {
+    double garage_minutes;    /* Total garage-time minutes              */
+    double raw_charge;        /* Charge at 10 AED/hr before adjustments */
+    double after_discount;    /* Charge after VIP discount (if any)     */
+    double final_charge;      /* Final amount after cap                 */
+    int    grace_applied;     /* 1 if within 15-min grace period        */
+    int    cap_applied;       /* 1 if 200 AED daily cap was applied     */
+} BillingBreakdown;
+
+/*
+ * calculate_charge_detailed — Compute parking fee with full breakdown.
+ * Returns the final charge (same as calculate_charge) and populates
+ * the breakdown struct with intermediate calculation steps.
+ */
+double calculate_charge_detailed(long entry_time, long exit_time,
+                                 int is_vip, BillingBreakdown *bd);
+
 #endif /* BILLING_H */
