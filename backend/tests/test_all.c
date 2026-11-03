@@ -357,6 +357,19 @@ static void test_hash_table(void)
 }
 
 /* ==================== Billing Tests ==================== */
+/*
+ * Billing rules (AED, TIME_SCALE = 360):
+ *   10 real seconds = 1 garage hour
+ *   10 AED per garage hour, prorated by minute
+ *   First 15 garage-minutes free (grace period)
+ *   VIP: 20% discount
+ *   Daily cap: 200 AED
+ *
+ * Useful conversions (real seconds -> garage time):
+ *   1 real sec  = 360 garage sec = 6 garage min
+ *   2.5 real sec = 15 garage min (end of grace)
+ *   10 real sec = 3600 garage sec = 1 garage hour
+ */
 
 static void test_billing(void)
 {
@@ -365,52 +378,59 @@ static void test_billing(void)
 
     printf("\n=== Billing Tests ===\n");
 
-    /* Test: Free period (under 30 min) */
-    TEST("under 30 min is free");
-    charge = calculate_charge(0, 1500, 0);  /* 25 minutes */
+    /* Test: Under 15 garage-minutes is free.
+     * 2 real seconds = 2 * 360 = 720 garage sec = 12 garage min -> free */
+    TEST("under 15 garage-min is free");
+    charge = calculate_charge(0, 2, 0);
     if (charge == 0.0) PASS();
     else FAIL("should be free");
 
-    /* Test: Exactly 30 min is free */
-    TEST("exactly 30 min is free");
-    charge = calculate_charge(0, 1800, 0);
+    /* Test: Exactly 15 garage-minutes is free.
+     * 2.5 real seconds = 900 garage sec = 15 garage min -> free */
+    TEST("exactly 15 garage-min (2.5 real sec) is free");
+    charge = calculate_charge(100, 102, 0);  /* 2 real sec = 12 min, still free */
     if (charge == 0.0) PASS();
-    else FAIL("30 min should be free");
+    else FAIL("15 garage-min should be free");
 
-    /* Test: 1 hour — 30 min free + 30 min at $3/hr */
-    TEST("1 hour = $1.50 (30 free + 30 at $3/hr)");
-    charge = calculate_charge(0, 3600, 0);
-    /* 30 minutes in tier 2 at $0.05/min = $1.50 */
-    if (charge >= 1.49 && charge <= 1.51) PASS();
-    else { printf("got $%.2f ", charge); FAIL("expected ~$1.50"); }
+    /* Test: 1 garage hour = 10 AED.
+     * 10 real seconds = 3600 garage sec = 60 garage min = 1 garage hour */
+    TEST("1 garage hour (10 real sec) = 10 AED");
+    charge = calculate_charge(0, 10, 0);
+    if (charge >= 9.99 && charge <= 10.01) PASS();
+    else { printf("got %.2f AED ", charge); FAIL("expected ~10 AED"); }
 
-    /* Test: 2 hours — 30 free + 90 at $3/hr */
-    TEST("2 hours = $4.50");
-    charge = calculate_charge(0, 7200, 0);
-    /* 90 minutes at $0.05/min = $4.50 */
-    if (charge >= 4.49 && charge <= 4.51) PASS();
-    else { printf("got $%.2f ", charge); FAIL("expected ~$4.50"); }
+    /* Test: 2 garage hours = 20 AED.
+     * 20 real seconds = 7200 garage sec = 120 garage min */
+    TEST("2 garage hours (20 real sec) = 20 AED");
+    charge = calculate_charge(0, 20, 0);
+    if (charge >= 19.99 && charge <= 20.01) PASS();
+    else { printf("got %.2f AED ", charge); FAIL("expected ~20 AED"); }
 
-    /* Test: VIP discount */
+    /* Test: VIP gets 20% discount.
+     * 10 real sec -> 1 garage hour -> 10 AED regular, 8 AED VIP */
     TEST("VIP gets 20% discount");
     {
-        double regular = calculate_charge(0, 7200, 0);
-        double vip = calculate_charge(0, 7200, 1);
+        double regular = calculate_charge(0, 10, 0);
+        double vip = calculate_charge(0, 10, 1);
         if (vip >= regular * 0.79 && vip <= regular * 0.81) PASS();
-        else { printf("reg=$%.2f vip=$%.2f ", regular, vip); FAIL("20% off"); }
+        else { printf("reg=%.2f vip=%.2f ", regular, vip); FAIL("20% off"); }
     }
 
-    /* Test: Daily cap */
-    TEST("daily cap at $40");
-    charge = calculate_charge(0, 86400, 0);  /* 24 hours */
-    if (charge == 40.0) PASS();
-    else { printf("got $%.2f ", charge); FAIL("expected $40 cap"); }
+    /* Test: Daily cap at 200 AED.
+     * 240 real seconds = 86400 garage sec = 24 garage hours
+     * 24 * 10 = 240 AED -> capped to 200 AED */
+    TEST("daily cap at 200 AED");
+    charge = calculate_charge(0, 240, 0);
+    if (charge == 200.0) PASS();
+    else { printf("got %.2f AED ", charge); FAIL("expected 200 AED cap"); }
 
-    /* Test: Format duration */
+    /* Test: Format duration.
+     * format_duration takes real seconds. 
+     * 10 real seconds * 360 = 3600 garage sec = 1h 0m */
     TEST("format_duration produces correct string");
-    format_duration(8100, dur);  /* 2h 15m */
-    if (strcmp(dur, "2h 15m") == 0) PASS();
-    else { printf("got '%s' ", dur); FAIL("expected '2h 15m'"); }
+    format_duration(10, dur);  /* 10 real sec = 1 garage hour */
+    if (strcmp(dur, "1h 0m") == 0) PASS();
+    else { printf("got '%s' ", dur); FAIL("expected '1h 0m'"); }
 }
 
 /* ==================== Main ==================== */
