@@ -39,6 +39,7 @@ flowchart TB
 - **Random Plate Generation** — click any action with an empty input and a random plate is auto-generated.
 - **Accelerated Time** — 10 real seconds = 1 garage hour. Live garage clock in the pricing panel.
 - **AED Billing** — 10 AED/hour flat rate, 15-minute grace period, 20% VIP discount, 200 AED daily cap.
+- **Detailed Exit Receipt** — itemized billing calculation breakdown in the exit modal showing garage duration, base charge formula, VIP discount, and daily cap status.
 - **Responsive Glassmorphism** — frosted glass panels, backdrop blur, gradient backgrounds.
 
 ---
@@ -84,11 +85,11 @@ parking-garage/
 │   └── Makefile
 ├── frontend/
 │   ├── index.html            # Dashboard layout + boot overlay
-│   ├── css/style.css         # 4-theme glassmorphism design system
+│   ├── css/style.css         # Aurora glassmorphism design system
 │   └── js/
 │       ├── api.js            # Fetch-based API client
-│       ├── components.js     # Pure UI renderers
-│       └── app.js            # Controller, themes, seed, clock
+│       ├── components.js     # Pure UI renderers (dashboard, modal receipt)
+│       └── app.js            # Controller, seed data, garage clock
 ├── server.py                 # Flask subprocess bridge
 ├── requirements.txt          # flask
 ├── LICENSE                   # MIT
