@@ -47,18 +47,18 @@ flowchart TB
 ## Data Structures
 
 | # | Structure | Source Files | Purpose | Key Operations |
-|---|-----------|-------------|---------|----------------|
+|---|---|---|---|---|
 | 1 | **Circular Queue** | `circular_queue.c/h` | Tracks available slot indices per floor. Dequeue = park, enqueue = free. Wraps around for efficient reuse. | `enqueue` · `dequeue` — O(1) |
 | 2 | **Min-Heap Priority Queue** | `priority_queue.c/h` | VIP-prioritised waitlist. When full, vehicles queue by priority (VIP > Reserved > Regular) with FIFO tie-breaking. | `insert` · `extract_min` — O(log n) |
-| 3 | **Stack** (Linked List) | `stack.c/h` | Exit-lane LIFO simulation. Models a single-lane exit where only the last car in can leave first. | `push` · `pop` · `peek` — O(1) |
+| 3 | **Stack (Linked List)** | `stack.c/h` | Exit-lane LIFO simulation. Models a single-lane exit where only the last car in can leave first. | `push` · `pop` · `peek` — O(1) |
 | 4 | **Singly Linked List** | `linked_list.c/h` | Chronological activity log. Every park/exit event is appended at the tail. | `append` — O(1) |
-| 5 | **Hash Table** (DJB2 + Chaining) | `hash_table.c/h` | License plate → parking location lookup. DJB2 hash with 101 buckets and separate chaining. | `insert` · `lookup` · `delete` — O(1) avg |
+| 5 | **Hash Table (DJB2 + Chaining)** | `hash_table.c/h` | License plate → parking location lookup. DJB2 hash with 101 buckets and separate chaining. | `insert` · `lookup` · `delete` — O(1) avg |
 
 ---
 
 ## Project Structure
 
-```
+```text
 parking-garage/
 ├── backend/
 │   ├── include/              # Header files (8)
@@ -108,6 +108,7 @@ parking-garage/
 ### 1. Build the Backend
 
 **macOS / Linux / WSL:**
+
 ```bash
 cd backend
 make
@@ -115,6 +116,7 @@ make test
 ```
 
 **Windows (CMD / PowerShell):**
+
 ```cmd
 cd backend
 build.bat
@@ -128,7 +130,7 @@ pip install -r requirements.txt
 python server.py
 ```
 
-### 4. Open the Dashboard
+### 3. Open the Dashboard
 
 Navigate to **http://localhost:5000**
 
@@ -164,17 +166,17 @@ All commands output JSON to stdout.
 ## API Endpoints
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET`  | `/api/status` | Garage overview (floors, stats) |
+|---|---|---|
+| `GET` | `/api/status` | Garage overview (floors, stats) |
 | `POST` | `/api/park` | Park a vehicle `{plate, is_vip}` |
 | `POST` | `/api/exit` | Exit a vehicle `{plate}` |
-| `GET`  | `/api/lookup?plate=X` | Find vehicle location |
-| `GET`  | `/api/log` | Recent 20 activity entries |
-| `GET`  | `/api/vehicles` | List all parked vehicles with VIP status |
+| `GET` | `/api/lookup?plate=X` | Find vehicle location |
+| `GET` | `/api/log` | Recent 20 activity entries |
+| `GET` | `/api/vehicles` | List all parked vehicles with VIP status |
 | `POST` | `/api/exitlane_push` | Push to exit lane |
 | `POST` | `/api/exitlane_pop` | Pop from exit lane + billing |
-| `GET`  | `/api/exitlane_view` | View exit lane contents |
-| `GET`  | `/api/waitlist` | View waitlist entries |
+| `GET` | `/api/exitlane_view` | View exit lane contents |
+| `GET` | `/api/waitlist` | View waitlist entries |
 | `POST` | `/api/reset` | Reset garage to empty |
 
 ---
@@ -182,7 +184,7 @@ All commands output JSON to stdout.
 ## Billing & Time
 
 | Setting | Value |
-|---------|-------|
+|---|---|
 | **Time scale** | 10 real seconds = 1 garage hour (360×) |
 | **Grace period** | First 15 garage-minutes free |
 | **Standard rate** | 10 AED/hour (prorated) |
@@ -213,16 +215,40 @@ Edit `backend/include/billing.h` to change time scale:
 ## Testing
 
 | Module | Tests | Status |
-|--------|-------|--------|
+|---|---|---|
 | Circular Queue | 6 | ✅ Pass |
 | Priority Queue | 5 | ✅ Pass |
 | Stack | 4 | ✅ Pass |
 | Linked List | 4 | ✅ Pass |
 | Hash Table | 6 | ✅ Pass |
 | Billing | 7 | ✅ Pass |
-| **Total** | **33** | **✅ All Pass** |
+| **Total** | **32** | **✅ All Pass** |
 
 Compiled with `gcc -Wall -Wextra` — **zero warnings**.
+
+---
+
+## Troubleshooting
+
+If you encounter problems while setting up or running the project, check the following solutions:
+
+| Problem | Possible Solution |
+|---|---|
+| GCC not recognized | Install GCC and ensure it is added to your system PATH. |
+| Flask module not found | Run `pip install -r requirements.txt`. |
+| Backend executable missing | Navigate to the backend directory and run the appropriate build command. |
+| Port 5000 already in use | Stop the application using that port before starting the Flask server. |
+| Dashboard not loading | Ensure the Flask server is running and open `http://localhost:5000` in your browser. |
+| Changes are not reflected | Refresh the browser and check whether the latest frontend files have been saved. |
+
+### Getting Help
+
+If the issue persists:
+
+- Check the terminal for error messages.
+- Verify that all prerequisites are installed.
+- Ensure the backend executable has been compiled successfully.
+- Review the project structure and configuration files before running the application again.
 
 ---
 
