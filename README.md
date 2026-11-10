@@ -247,7 +247,7 @@ If the issue persists:
 
 - Check the terminal for error messages.
 - Verify that all prerequisites are installed.
-- Ensure the backend executable has been compiled successfully.
+- Ensure the backend executable has been compiled successfullly.
 - Review the project structure and configuration files before running the application again.
 
 ---
